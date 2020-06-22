@@ -1,0 +1,2 @@
+include ':app', ':jbgf_room_annotation', ':jbgf_room_compiler'
+rootProject.name='AptRoom'
