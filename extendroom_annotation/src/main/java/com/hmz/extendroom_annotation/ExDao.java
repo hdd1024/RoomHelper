@@ -9,7 +9,8 @@ import java.lang.annotation.Target;
  * 创建时间:2020-06-21
  * 作   者: [hanmingze]
  * 功能描述: <生成getxxxDao()抽象方法的标记>
- * 备注信息: {该注释用在Room的<code>@Dao</code>注释标记的类上，框架在编译期间会
+ * 备注信息: {该标签必须配合Room的@Dao使用，不然Room在无法生产相关数据库信息，
+ * 该注释用在Room的<code>@Dao</code>注释标记的类上，框架在编译期间会
  * 将使用该标记的类自动在{@link ExDatabase 注释标记生成的类中生成 getxxxDao()的静态方法}}
  * @see
  **********************************************************/

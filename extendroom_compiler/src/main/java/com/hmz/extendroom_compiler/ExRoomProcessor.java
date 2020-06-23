@@ -30,6 +30,7 @@ import javax.tools.Diagnostic;
 
 @AutoService(Processor.class)
 @SupportedAnnotationTypes({"com.hmz.extendroom_annotation.ExEntity",
+        "com.hmz.extendroom_annotation.ExAlterCreater",
         "com.hmz.extendroom_annotation.ExDatabase",
         "com.hmz.extendroom_annotation.ExDao"})
 @SupportedSourceVersion(SourceVersion.RELEASE_8)

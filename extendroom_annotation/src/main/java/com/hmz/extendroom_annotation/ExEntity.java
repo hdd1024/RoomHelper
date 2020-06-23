@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
  * 作   者: [hanmingze]
  * 功能描述: <用于正在生产Room的<code>@Database</code>标记类的时候
  * 作为<code>entities</code>的值>
- * 备注信息: {}
+ * 备注信息: {该标签必须配合Room的@Entity使用，不然Room在无法生产相关数据库信息}
  * @see
  **********************************************************/
 @Target(ElementType.TYPE)

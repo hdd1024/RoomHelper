@@ -8,6 +8,8 @@ dependencies {
     implementation project(':extendroom_annotation')
     def room_version = "2.2.4"
     compileOnly "androidx.room:room-compiler:$room_version" // For Kotlin use kapt instead of annotationProcessor
+    compileOnly "androidx.room:room-runtime:$room_version"
+
 
 }
 
