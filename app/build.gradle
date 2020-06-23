@@ -39,8 +39,8 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    compileOnly project(":jbgf_room_annotation")
-    annotationProcessor project(":jbgf_room_compiler")
+    compileOnly project(':extendroom_annotation')
+    annotationProcessor project(':extendroom_compiler')
     def room_version = "2.2.4"
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"

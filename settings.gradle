@@ -1,2 +1,2 @@
-include ':app', ':jbgf_room_annotation', ':jbgf_room_compiler'
+include ':app', ':extendroom_annotation', ':extendroom_compiler'
 rootProject.name='AptRoom'
