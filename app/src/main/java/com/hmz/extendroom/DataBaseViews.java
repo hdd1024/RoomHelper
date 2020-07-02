@@ -1,4 +1,4 @@
-package com.hmz.aptroom;
+package com.hmz.extendroom;
 
 //@DatabaseView
 public class DataBaseViews {

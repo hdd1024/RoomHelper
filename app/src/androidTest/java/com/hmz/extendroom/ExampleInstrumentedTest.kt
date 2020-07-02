@@ -1,4 +1,4 @@
-package com.hmz.aptroom
+package com.hmz.extendroom
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

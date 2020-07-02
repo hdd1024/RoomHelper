@@ -1,12 +1,11 @@
-package com.hmz.aptroom;
+package com.hmz.extendroom;
 
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
-import com.hmz.aptroom.entity.TestEntity;
-import com.hmz.extendroom_annotation.ExDao;
+import com.hmz.extendroom.entity.TestEntity;
 
 import java.util.List;
 

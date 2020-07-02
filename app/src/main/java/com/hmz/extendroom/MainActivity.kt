@@ -1,8 +1,8 @@
-package com.hmz.aptroom
+package com.hmz.extendroom
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.hmz.aptroom.roombase.TestJbRoomBase
+import com.hmz.extendroom.roombase.TestJbRoomBase
 
 class MainActivity : AppCompatActivity() {
     private var testJbRoomBase: TestJbRoomBase? = null

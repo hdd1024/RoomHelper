@@ -1,4 +1,4 @@
-package com.hmz.aptroom
+package com.hmz.extendroom
 
 import org.junit.Test
 

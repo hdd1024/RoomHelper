@@ -21,8 +21,8 @@ public class Utils {
 
     /**
      * 该方法用于处理<code>Class[]</code>的结果值，将传入的类的全名字符串处理成
-     * {com.example.aptroom.DataBaseViews.class
-     * , com.example.aptroom.DataBaseViews2.class}的形式，以便于使用
+     * {com.example.extendroom.DataBaseViews.class
+     * , com.example.extendroom.DataBaseViews2.class}的形式，以便于使用
      * JavaPot提供的$T占位符赋值
      *
      * @param classFullNames 要处理的类的全类名

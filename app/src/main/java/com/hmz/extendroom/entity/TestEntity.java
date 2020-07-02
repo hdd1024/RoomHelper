@@ -1,9 +1,7 @@
-package com.hmz.aptroom.entity;
+package com.hmz.extendroom.entity;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
-
-import com.hmz.extendroom_annotation.ExEntity;
 
 @Entity(tableName = "tb_testEntity")
 public class TestEntity {

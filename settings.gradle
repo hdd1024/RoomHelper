@@ -1,2 +1,2 @@
 include ':app', ':extendroom_annotation', ':extendroom_compiler'
-rootProject.name='AptRoom'
+rootProject.name='ExtendRoom'

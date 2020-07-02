@@ -3,6 +3,7 @@ package com.hmz.extendroom_compiler;
 import androidx.room.Dao;
 import androidx.room.Entity;
 
+import com.hmz.extendroom_annotation.ExAlter;
 import com.hmz.extendroom_annotation.ExDao;
 import com.hmz.extendroom_annotation.ExDatabase;
 import com.hmz.extendroom_annotation.ExEntity;
@@ -10,6 +11,7 @@ import com.google.auto.service.AutoService;
 import com.hmz.extendroom_compiler.utils.Utils;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -22,15 +24,19 @@ import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.annotation.processing.SupportedSourceVersion;
 import javax.lang.model.SourceVersion;
+import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.element.VariableElement;
+import javax.lang.model.type.DeclaredType;
+import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
 import javax.tools.Diagnostic;
 
 @AutoService(Processor.class)
 @SupportedAnnotationTypes({"com.hmz.extendroom_annotation.ExEntity",
-        "com.hmz.extendroom_annotation.ExAlterCreater",
+        "com.hmz.extendroom_annotation.ExAlter",
         "com.hmz.extendroom_annotation.ExDatabase",
         "com.hmz.extendroom_annotation.ExDao"})
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
@@ -86,6 +92,8 @@ public class ExRoomProcessor extends AbstractProcessor {
         putEntityElements(entityElements);
         Set<? extends Element> daoElements = roundEnvironment.getElementsAnnotatedWith(Dao.class);
         putDaoElements(daoElements);
+//        Set<? extends Element> exAlterElements = roundEnvironment.getElementsAnnotatedWith(ExAlter.class);
+//        putExAlterElements(exAlterElements);
         for (ExDatabaseBean databaseBean : mExDatabaseBeabMap.values()) {
             ExDatabaseCreater exDatabaseCreater = new ExDatabaseCreater(mElements);
             exDatabaseCreater.createJavaClass(mFiler, databaseBean);
@@ -121,9 +129,17 @@ public class ExRoomProcessor extends AbstractProcessor {
                 exDatabaseBean.setEntityElement(element);
 
             }
+            //判断该元素是否包含@ExAlter
+            List<? extends Element> enclosedElements = element.getEnclosedElements();
+            for (Element enclosedElement : enclosedElements) {
+                ExAlter annotation = enclosedElement.getAnnotation(ExAlter.class);
+                if (annotation != null) {
+                    putExAlterElement((VariableElement) enclosedElement);
+                }
+            }
+
         }
     }
-
     private void putDaoElements(Set<? extends Element> elements) {
         for (Element element : elements) {
             mMessager.printMessage(Diagnostic.Kind.NOTE, "putDaoElements:" + element);
@@ -142,6 +158,63 @@ public class ExRoomProcessor extends AbstractProcessor {
                 exDatabaseBean.setDaoElement(element);
             }
         }
+    }
+
+    /**
+     * 处理{@link ExAlter 注解}如果startversion和endversion相同，则认为它们是一次修改
+     * 那么在生产Migration 代码是将会把它们写在同一个你函数中
+     *
+     * @param elements ExAlter元素集合
+     */
+    // TODO: 2020-06-24 还未调用该方法
+    private void putExAlterElements(Set<? extends Element> elements) {
+        for (Element element : elements) {
+            putExAlterElement((VariableElement) element);
+        }
+
+    }
+
+    private void putExAlterElement(VariableElement varElement) {
+        ExAlter annotation = varElement.getAnnotation(ExAlter.class);
+        int startVersion = annotation.startVersion();
+        int endVersion = annotation.endVersion();
+        for (ExDatabaseBean databaseBean : mExDatabaseBeabMap.values()) {
+            //获取用不存放修改元素的集合，该集合中的MigrateElementBean元素盛放这同一次修改的数据集
+            List<MigrateElementBean> migrateElementBeans = databaseBean.getMigrateElementBeans();
+            if (migrateElementBeans.size() == 0) {
+                //如果修改元素的集合中没有元素，那么就创建个修改元素的bean类，并添加到ExDatabaseBean的修改元素集合中
+                MigrateElementBean bean = setMigrateElmentBean(startVersion, endVersion, varElement);
+                databaseBean.setMigrateElementBean(bean);
+            } else {
+                //遍历修改元素集合，比较当前startversion和endversion是否相同
+                //如相同则代表为统一修改，那么就将该元素存放到当前遍历出出的MigrateElementBean的集合中
+                for (MigrateElementBean migrateElementBean : migrateElementBeans) {
+                    int beanEndVersion = migrateElementBean.getEndVersion();
+                    int beanStartVersion = migrateElementBean.getStartVersion();
+                    if (startVersion == beanStartVersion && endVersion == beanEndVersion) {
+                        migrateElementBean.setMigrates(varElement);
+                    } else {
+                        MigrateElementBean bean = setMigrateElmentBean(startVersion, endVersion, varElement);
+                        databaseBean.setMigrateElementBean(bean);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * 该方法用于配置MigrateElementBean 类，该类中盛放这同一次修改的元素
+     *
+     * @param startVersion 开始版本
+     * @param endVersion   结束版本
+     * @param element      @ExAlter元素
+     */
+    private MigrateElementBean setMigrateElmentBean(int startVersion, int endVersion, Element element) {
+        MigrateElementBean migrateBean = new MigrateElementBean();
+        migrateBean.setStartVersion(startVersion);
+        migrateBean.setEndVersion(endVersion);
+        migrateBean.setMigrates(element);
+        return migrateBean;
     }
 
 }

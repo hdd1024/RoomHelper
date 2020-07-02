@@ -1,11 +1,9 @@
-package com.hmz.aptroom.roombase2;
+package com.hmz.extendroom.roombase;
 
-//import com.example.aptroom.roombase.TestJbRoomBase_JbRoomBase;
 import com.hmz.extendroom_annotation.ExDatabase;
 
-@ExDatabase(setTarget = TestJbRoomBase2.TARGET, version = 2)
-public class TestJbRoomBase2 {
-    public final static String TARGET = "com.example.aptroom.roombase2.TestJbRoomBase2";
+@ExDatabase(version = 1)
+public class TestJbRoomBase {
 
 //    private TestJbRoomBase_JbRoomBase jbRoomBase;
 //

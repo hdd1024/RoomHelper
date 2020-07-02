@@ -1,4 +1,4 @@
-package com.hmz.aptroom;
+package com.hmz.extendroom;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,8 +6,8 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.hmz.aptroom.entity.TestEntity;
-import com.hmz.aptroom.roombase.TestJbRoomBase;
+import com.hmz.extendroom.entity.TestEntity;
+import com.hmz.extendroom.roombase.TestJbRoomBase;
 //import com.example.aptroom.roombase.TestJbRoomBase_JbRoomBase;
 
 

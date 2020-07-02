@@ -147,7 +147,10 @@ public class ExDatabaseCreater {
             typeSpecBuilder.addAnnotation(generateAnSpec());
         }
         typeSpecBuilder.superclass(RoomDatabase.class);
-//        typeSpecBuilder.addField(generateFidldSpec());
+        for (MigrateElementBean elementBean : exDatabaseBean.getMigrateElementBeans()) {
+
+            typeSpecBuilder.addField(new ExAlterCreater(elements, elementBean).alterMigration());
+        }
         typeSpecBuilder.addMethod(generateMethod_RoomInit());
         //添加dao接口的抽象方法
         for (Element dao : exDatabaseBean.getDaoElements()) {
