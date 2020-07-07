@@ -191,6 +191,7 @@ public class MakeExecSQL {
      * @param caller        字符串头部，该字符串会与.execSQL("组成如下：database..execSQL()
      * @param fromElement   数据来源类
      * @param fromTableName 来源表的名称，如果为null，则会从fromElement元素中获取
+     * @param oldField      如果存在@FieldHlp 是否获取修改元素的名称,true 该属性值名称已就属性名为准
      * @param toTableName   将数据添加到的表的名字
      * @return 拼装完成的字符串如下字符串：
      * database..execSQL("INSERT INTO new_table SELECT id,name,age FROM old_table");
@@ -307,7 +308,7 @@ public class MakeExecSQL {
                 String fieldName = encElement.toString();
                 //获取属性类型
                 String fielType = getFielType(encElement);
-                fiedsBuilser.append("`"+fieldName+"`");
+                fiedsBuilser.append("`" + fieldName + "`");
                 fiedsBuilser.append(" ");
                 fiedsBuilser.append(fielType);
                 PrimaryKey primaryKey = encElement.getAnnotation(PrimaryKey.class);

@@ -15,4 +15,4 @@ dependencies {
 
 sourceCompatibility = "8"
 targetCompatibility = "8"
-//apply from: 'com.jfrog.bintray.gradle'
+apply from: 'compiler_bintray.gradle'

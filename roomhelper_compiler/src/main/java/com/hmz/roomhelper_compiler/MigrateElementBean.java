@@ -10,9 +10,8 @@ import javax.lang.model.element.Element;
 /***********************************************************
  * 创建时间:2020-07-02
  * 作   者: [hanmingze]
- * 功能描述: <该类保存着对表进行增删改的@ExAlter标签的信息>
+ * describe: 该类保存着对表进行增删改的@ExAlter标签的信息
  * 备注信息: {该类中只保存这同意次版本修改的信息}
- * @see
  **********************************************************/
 public class MigrateElementBean implements Comparable<MigrateElementBean> {
 

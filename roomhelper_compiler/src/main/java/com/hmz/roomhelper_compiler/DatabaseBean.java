@@ -10,9 +10,8 @@ import javax.lang.model.element.VariableElement;
 /***********************************************************
  * 创建时间:2020-07-02
  * 作   者: [hanmingze]
- * 功能描述: <创建Room需要的Database类需要的信息类>
+ * describe: 创建Room需要的Database类需要的信息类
  * 备注信息: {}
- * @see
  **********************************************************/
 public class DatabaseBean {
     private String mPackageName;

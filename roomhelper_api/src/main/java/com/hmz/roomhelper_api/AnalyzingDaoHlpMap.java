@@ -9,7 +9,7 @@ import java.util.Map;
 /***********************************************************
  * 创建时间:2020-07-07
  * 作   者: [hanmingze]
- * 功能描述: <解析xx.TestJbRoomBase_Hlp类中的DAO_FIELD_MAP变量>
+ * describe: <解析xx.TestJbRoomBase_Hlp类中的DAO_FIELD_MAP变量>
  * 备注信息: {通过可以自动将{@link androidx.room.Dao}注入到操作数据库中
  * ，该类中必须含有@DaoHlp注解的属性}
  * @see

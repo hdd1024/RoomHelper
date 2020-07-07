@@ -3,15 +3,15 @@ apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
 // 定义两个链接，下面会用到。
-def siteUrl = 'https://github.com/hdd1024/ExtendRoom' // 项目主页。
-def gitUrl = 'https://github.com/hdd1024/ExtendRoom.git' // Git仓库的url。
+def siteUrl = 'https://github.com/hdd1024/RoomHelper' // 项目主页。
+def gitUrl = 'https://github.com/hdd1024/RoomHelper.git' // Git仓库的url。
 
 // 唯一包名，比如implementation 'groupId:artifactId:version'中的groupId就是这里配置的。
-group = "com.han.com.example.aptroom"
+group = "com.hmz"
 //// 项目名称, 比如implementation 'groupId:artifactId:version'中的artifactId就是这里配置的。
-project.archivesBaseName = "extendroom"
+project.archivesBaseName = "roomhelper_compiler"
 //项目引用的版本号，比如implementation 'groupId:artifactId:version'中的version就是这里配置的。
-version = "1.0.1"
+version = "1.0.0"
 
 install {
     repositories.mavenInstaller {
@@ -20,7 +20,7 @@ install {
             project {
                 packaging 'jar' // 包格式aar、jar
                 // 项目描述
-                name 'ExtendRoom'// 可选，项目名称。
+                name 'roomhelper_compiler'// 可选，项目名称。
 //                description 'mylibrary project describe'// 可选，项目描述。
                 url siteUrl // 项目主页，这里是引用上面定义好。
 
@@ -35,7 +35,7 @@ install {
                 //填写开发者基本信息，填写你bintray网站上个人信息，上面步骤有提过。
                 developers {
                     developer {
-                        id 'hdd1024' // 开发者的id。
+                        id 'hanmz1024' // 开发者的id。
                         name 'hdd' // 开发者名字。
                         email 'hanmz1024@gmail.com' // 开发者邮箱。
                     }
@@ -90,9 +90,9 @@ bintray {
 
     configurations = ['archives']
     pkg {
-        repo = "ExtendRoom"  //Repository名字 需要自己在bintray网站上先添加
-        name = "extendroom"// 发布到Bintray上的项目名字,你在bintray网站上新建的包名
-        userOrg = '18931863853'//Bintray的组织id，可以填写的你的开发者的id
+        repo = "RoomHelper"  //Repository名字 需要自己在bintray网站上先添加
+        name = "roomhelper_compiler"// 发布到Bintray上的项目名字,你在bintray网站上新建的包名
+        userOrg = 'hanmz1024'//Bintray的组织id，可以填写的你的开发者的id
         websiteUrl = siteUrl
         vcsUrl = gitUrl
         licenses = ["Apache-2.0"]

@@ -14,7 +14,7 @@ import java.lang.reflect.Type;
 /***********************************************************
  * 创建时间:2020-07-07
  * 作   者: [hanmingze]
- * 功能描述: <该类用于解析MIGRATION_1_2变量>
+ * describe: <该类用于解析MIGRATION_1_2变量>
  * 备注信息: {该类通过反射自动将xx.TestJbRoomBase_Hlp类中的MIGRATION_1_2变量
  * 添加到{@link RoomDatabase.Builder#addMigrations(Migration...)}方法中}
  **********************************************************/

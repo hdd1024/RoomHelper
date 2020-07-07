@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 /***********************************************************
  * 创建时间:2020-06-21
  * 作   者: [hanmingze]
- * 功能描述: <用于生成Room的@Database修饰的抽象类>
+ * describe: <用于生成Room的@Database修饰的抽象类>
  * 备注信息: {在类似加上该标记，在编译期间会生产/app/build/generated
  * /ap_generated_sources/debug/out/标记类类路径/xxx_Hlp.java
  * 文件。生成个该文件是对Room的<code>@Database</code>的标记使用。启动会生产
