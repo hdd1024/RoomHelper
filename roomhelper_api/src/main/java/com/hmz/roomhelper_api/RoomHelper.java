@@ -4,16 +4,25 @@ import android.content.Context;
 
 import androidx.room.RoomDatabase;
 
+import java.util.HashMap;
+import java.util.Map;
 
+/***********************************************************
+ * 创建时间:2020-07-07
+ * 作   者: [hanmingze]
+ * 功能描述: <RoomHelper的辅助类>
+ * 备注信息: {}
+ * @see
+ **********************************************************/
 public class RoomHelper {
     private final static String TAG = RoomHelper.class.getSimpleName();
-
     private static RoomHelper intanse;
     private Object databaseObj;
     private Object base_Hlp_Imp_Obj;
     private Class databaseClass;
     private Class base_Hlp_Impl_Class;
     private AnalyzingMigrate migrate;
+    private Map<String, Object> controllerMap;
 
     public static RoomHelper getIntanse() {
         if (intanse == null) {
@@ -27,6 +36,7 @@ public class RoomHelper {
     }
 
     private RoomHelper() {
+        controllerMap = new HashMap<>();
     }
 
     public RoomHelper initHelper(Object databaseObj) {
@@ -69,8 +79,24 @@ public class RoomHelper {
      */
     public <T> T injectDao(Class<T> controllerClass) {
         if (migrate == null) throw new NullPointerException("请先调用了initHelper()初始化了工具类在调用此方法");
+        String className = controllerClass.getName();
+        Object controller = controllerMap.get(className);
+        if (controller != null) {
+            return controllerClass.cast(controller);
+        }
         AnalyzingDaoHlpMap daoHlpMap = new AnalyzingDaoHlpMap(base_Hlp_Imp_Obj);
-        return daoHlpMap.injectDao(controllerClass);
+        T t = daoHlpMap.injectDao(controllerClass);
+        controllerMap.put(className, t);
+        return t;
+    }
+
+    public void clearControllerMap() {
+        controllerMap.clear();
+    }
+
+    public <T> T removeController(Class<T> controller) {
+        Object remove = controllerMap.remove(controller.getName());
+        return controller.cast(remove);
     }
 
 

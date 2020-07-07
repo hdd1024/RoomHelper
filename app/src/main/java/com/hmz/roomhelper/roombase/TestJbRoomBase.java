@@ -1,7 +1,6 @@
 package com.hmz.roomhelper.roombase;
 
 import android.content.Context;
-
 import androidx.room.migration.Migration;
 
 import com.hmz.roomhelper_api.RoomHelper;
@@ -37,5 +36,7 @@ public class TestJbRoomBase {
     public TestController getTestController() {
         return injectDao(TestController.class);
     }
+
+
 
 }

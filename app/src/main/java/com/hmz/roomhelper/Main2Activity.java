@@ -28,7 +28,9 @@ public class Main2Activity extends AppCompatActivity {
         entity.setTestName("=====韩明泽哦！");
         TestJbRoomBase.getInstance().init(getBaseContext());
         TestController testController = TestJbRoomBase.getInstance().getTestController();
-        testController.intsert();
+//        testController.intsert();
+
+
 //        final TestJbRoomBase_JbRoomBase builder = testJbRoomBase.getBuilder(getBaseContext());
 //        TestDao testDao = builder.getTestDao();
 
