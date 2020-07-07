@@ -1,0 +1,35 @@
+import com.android.build.gradle.internal.dsl.JavaCompileOptions
+
+apply plugin: 'com.android.library'
+android {
+    compileSdkVersion 30
+    buildToolsVersion "30.0.0"
+    defaultConfig {
+        minSdkVersion 15
+        targetSdkVersion 30
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        javaCompileOptions { JavaCompileOptions options ->
+            options.annotationProcessorOptions.includeCompileClasspath false
+
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+dependencies {
+    compileOnly fileTree(dir: 'libs', include: ['*.jar'])
+    def room_version = "2.2.4"
+    annotationProcessor "androidx.room:room-compiler:$room_version"
+    // For Kotlin use kapt instead of annotationProcessor
+    compileOnly "androidx.room:room-runtime:$room_version"
+
+}
+
+sourceCompatibility = "8"
+targetCompatibility = "8"

@@ -1,2 +1,2 @@
-include ':app', ':extendroom_annotation', ':extendroom_compiler'
-rootProject.name='ExtendRoom'
+include ':app', ':roomhelper_annotation', ':roomhelper_compiler', ':roomhelper_api'
+rootProject.name='RoomHelper'

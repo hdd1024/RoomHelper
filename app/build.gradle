@@ -10,7 +10,7 @@ android {
     compileSdkVersion 30
     buildToolsVersion "30.0.0"
     defaultConfig {
-        applicationId "com.example.extendroom"
+        applicationId "com.hmz.roomhelper"
         minSdkVersion 15
         targetSdkVersion 30
         versionCode 1
@@ -39,8 +39,9 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    compileOnly project(':extendroom_annotation')
-    annotationProcessor project(':extendroom_compiler')
+    compileOnly project(':roomhelper_annotation')
+    annotationProcessor project(':roomhelper_compiler')
+    implementation project(":roomhelper_api")
     def room_version = "2.2.4"
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"

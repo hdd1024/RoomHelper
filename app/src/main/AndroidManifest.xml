@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="com.hmz.extendroom">
+	package="com.hmz.roomhelper">
 	
 	<application
 		android:allowBackup="true"
@@ -9,8 +9,8 @@
 		android:roundIcon="@mipmap/ic_launcher_round"
 		android:supportsRtl="true"
 		android:theme="@style/AppTheme">
-		<activity android:name="com.hmz.extendroom.MainActivity"></activity>
-		<activity android:name="com.hmz.extendroom.Main2Activity">
+		<activity android:name="com.hmz.roomhelper.MainActivity"></activity>
+		<activity android:name="com.hmz.roomhelper.Main2Activity">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				

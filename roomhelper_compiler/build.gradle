@@ -1,0 +1,18 @@
+apply plugin: 'java-library'
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    compileOnly 'com.google.auto.service:auto-service:1.0-rc7'
+    annotationProcessor 'com.google.auto.service:auto-service:1.0-rc7'
+    // 帮助我们通过类调用的形式来生成Java代码
+    implementation "com.squareup:javapoet:1.12.1"
+    implementation project(':roomhelper_annotation')
+    def room_version = "2.2.4"
+    compileOnly "androidx.room:room-compiler:$room_version" // For Kotlin use kapt instead of annotationProcessor
+    compileOnly "androidx.room:room-runtime:$room_version"
+
+
+}
+
+sourceCompatibility = "8"
+targetCompatibility = "8"
+//apply from: 'com.jfrog.bintray.gradle'
