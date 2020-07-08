@@ -18,4 +18,7 @@ public interface TestDao {
     @Query("select * from tb_testEntity")
     List<TestEntity> query();
 
+    @Query("select * from tb_testEntity where testId=:id")
+    TestEntity queryById(int id);
+
 }

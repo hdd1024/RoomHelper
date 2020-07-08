@@ -1,6 +1,7 @@
 package com.hmz.roomhelper_api;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.room.RoomDatabase;
 import androidx.room.migration.Migration;
@@ -22,27 +23,23 @@ public class AnalyzingMigrate {
 
     private RoomDatabase.Builder builder;
     private Object databaseObj;
-    private Object base_Hlp_Imp_Obj;
-    private Class databaseClass;
     private Class base_Hlp_Impl_Class;
 
-    public AnalyzingMigrate(Object databaseObj, Object base_Hlp_Imp_Obj,
-                            Class databaseClass, Class base_Hlp_Impl_Class) {
+    public AnalyzingMigrate(Object databaseObj, Class base_Hlp_Impl_Class) {
         this.databaseObj = databaseObj;
-        this.base_Hlp_Imp_Obj = base_Hlp_Imp_Obj;
-        this.databaseClass = databaseClass;
         this.base_Hlp_Impl_Class = base_Hlp_Impl_Class;
     }
 
     public RoomDatabase.Builder getBuilder(Context context)
             throws Exception {
         RoomDatabase.Builder builder = null;
-        this.builder = builder;
         //获取xx.TestJbRoomBase_Hlp类
         Method roomInit = base_Hlp_Impl_Class.getMethod("roomInit", Context.class);
-        builder = (RoomDatabase.Builder) roomInit.invoke(databaseObj, context);
+        builder = (RoomDatabase.Builder) roomInit.invoke(null, context);
+        Log.d("AnalyzingMigrate", "builder的值：" + builder);
+        this.builder = builder;
         //解析TestJbRoomBase类中是否存在自定义的Migration变量
-        Field[] declaredFields = databaseClass.getDeclaredFields();
+        Field[] declaredFields = base_Hlp_Impl_Class.getDeclaredFields();
         for (Field declaredField : declaredFields) {
             Type fieldType = declaredField.getGenericType();
             if (fieldType.equals(Migration.class)) {
@@ -50,6 +47,8 @@ public class AnalyzingMigrate {
                     declaredField.setAccessible(true);
                 }
                 Migration migration = (Migration) declaredField.get(databaseObj);
+                Log.d("AnalyzingMigrate", "------>migration的值：" + migration);
+
                 if (builder != null) {
                     builder.addMigrations(migration);
                 }
@@ -57,11 +56,16 @@ public class AnalyzingMigrate {
         }
         //解析TestJbRoomBase_Hlp类中的Migration变量
         //获取父元素的属性 也就是获取xx.TestJbRoomBase_Hlp的属性
-        Field[] hlpFields = base_Hlp_Impl_Class.getSuperclass().getDeclaredFields();
+        Field[] hlpFields = base_Hlp_Impl_Class.getDeclaredFields();
         for (Field hlpField : hlpFields) {
-            Migration migration = Utils.analyzingField(Migration.class, hlpField, base_Hlp_Imp_Obj);
-            if (migration != null)
-                builder.addMigrations(migration);
+            Type fieldType = hlpField.getGenericType();
+            if (fieldType==Migration.class) {
+                if (!hlpField.isAccessible()) {
+                    hlpField.setAccessible(true);
+                }
+                builder.addMigrations((Migration) hlpField.get(null));
+                Log.d(">>>>>>>>>>>aaaaaa>>>>>>", "nnnn<<<<" + hlpField.getName());
+            }
         }
         return builder;
     }

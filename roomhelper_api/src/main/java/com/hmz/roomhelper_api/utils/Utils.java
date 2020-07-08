@@ -1,5 +1,7 @@
 package com.hmz.roomhelper_api.utils;
 
+import android.util.Log;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 
@@ -21,6 +23,8 @@ public class Utils {
             if (!field.isAccessible()) {
                 field.setAccessible(true);
             }
+
+            Log.d(">>>>>>>>>>>aaaaaa>>>>>>", "nnnn<<<<" + field.getName());
             return tClass.cast(field.get(obj));
         }
         return null;

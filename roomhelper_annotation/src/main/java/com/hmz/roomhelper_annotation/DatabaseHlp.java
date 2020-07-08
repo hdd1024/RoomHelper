@@ -8,13 +8,12 @@ import java.lang.annotation.Target;
 /***********************************************************
  * 创建时间:2020-06-21
  * 作   者: [hanmingze]
- * describe: <用于生成Room的@Database修饰的抽象类>
+ * describe: 用于生成Room的@Database修饰的抽象类
  * 备注信息: {在类似加上该标记，在编译期间会生产/app/build/generated
  * /ap_generated_sources/debug/out/标记类类路径/xxx_Hlp.java
  * 文件。生成个该文件是对Room的<code>@Database</code>的标记使用。启动会生产
- * 一个<code>roomInit()</code>方法该方法会返回一个<code>RoomDatabase.Builder</code>
+ * 一个<code>roomInit()</code>方法该方法会返回一个<code>HelperBuilder</code>
  * 可用于继续配置数据库}
- * @see
  **********************************************************/
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.CLASS)
@@ -35,6 +34,7 @@ public @interface DatabaseHlp {
     /**
      * 数据库的名称
      * 如果不传默认将会以使用该注解类的类名作为数据库的名称
+     * @return 默认""
      */
     String name() default "";
 
@@ -49,12 +49,14 @@ public @interface DatabaseHlp {
     /**
      * 配置的值会设置在Room的<code>@Database</code>的
      * <code>views</code>中。
+     * @return 默认{}
      */
     Class<?>[] views() default {};
 
     /**
      * 配置的值会设置在Room的<code>@Database</code>的
      * <code>exportSchema</code>中
+     * @return 默认true
      */
     boolean exportSchema() default true;
 

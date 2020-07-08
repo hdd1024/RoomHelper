@@ -3,13 +3,13 @@ package com.hmz.roomhelper;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.hmz.roomhelper.controller.TestController;
 import com.hmz.roomhelper.entity.TestEntity;
 import com.hmz.roomhelper.roombase.TestJbRoomBase;
-//import com.example.aptroom.roombase.TestJbRoomBase_JbRoomBase;
 
 
 public class Main2Activity extends AppCompatActivity {
@@ -23,30 +23,21 @@ public class Main2Activity extends AppCompatActivity {
         setContentView(R.layout.activity_main2);
         btn_db_query = findViewById(R.id.btn_db_query);
         tv_db_data = findViewById(R.id.tv_db_data);
-        TestEntity entity = new TestEntity();
-        entity.setTestId(12345);
-        entity.setTestName("=====韩明泽哦！");
         TestJbRoomBase.getInstance().init(getBaseContext());
-        TestController testController = TestJbRoomBase.getInstance().getTestController();
-//        testController.intsert();
+        final TestController testController = TestJbRoomBase.getInstance().getTestController();
+        testController.intsert("韩明泽", 12345);
 
+        btn_db_query.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TestEntity testEntity = testController.queryById(12345);
+                tv_db_data.setText(testEntity.getTestName());
+            }
+        });
 
-//        final TestJbRoomBase_JbRoomBase builder = testJbRoomBase.getBuilder(getBaseContext());
-//        TestDao testDao = builder.getTestDao();
+//        TestJbRoomBase.getInstance().getTestController2()
+//                .insert();
 
-//        testDao.insert(entity);
-//        btn_db_query.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//                TestDao testDao = builder.getTestDao();
-//                List<TestEntity> entities = testDao.query();
-//                for (TestEntity en : entities) {
-//                    tv_db_data.setText("查询的数据为：" + en.getTestName());
-//                }
-//
-//            }
-//        });
 
     }
 }

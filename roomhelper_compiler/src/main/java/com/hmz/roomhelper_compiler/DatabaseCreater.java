@@ -1,10 +1,8 @@
 package com.hmz.roomhelper_compiler;
 
-import android.content.Context;
 
 import androidx.room.Dao;
 import androidx.room.Database;
-import androidx.room.RoomDatabase;
 
 import com.hmz.roomhelper_annotation.DaoHlp;
 import com.hmz.roomhelper_annotation.DatabaseHlp;
@@ -12,6 +10,7 @@ import com.hmz.roomhelper_compiler.utils.Utils;
 import com.squareup.javapoet.*;
 
 import java.io.IOException;
+import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -76,6 +75,7 @@ public class DatabaseCreater {
             builder.append(databaseBean.getClassFullName());
             List<MigrateElementBean> elementBeans = databaseBean.getMigrateElementBeans();
             if (elementBeans.size() != 0) {
+                Collections.sort(elementBeans);
                 MigrateElementBean max = Collections.max(elementBeans);
                 version = max.getEndVersion();
             } else {
@@ -119,10 +119,15 @@ public class DatabaseCreater {
         return fieldSpec;
     }
 
+    /**
+     * 条件用于保存 注入dao的信息
+     *
+     * @param typeSpecBuilder
+     */
     private void generateDaoFileMap(TypeSpec.Builder typeSpecBuilder) {
         ParameterizedTypeName mapTypeName = ParameterizedTypeName.get(Map.class, String.class, String.class);
         FieldSpec.Builder builder = FieldSpec.builder(mapTypeName, DAO_FIELD_MAP);
-        builder.addModifiers(Modifier.PRIVATE, Modifier.FINAL);
+        builder.addModifiers(Modifier.PRIVATE, Modifier.STATIC, Modifier.FINAL);
         builder.initializer("new $T<$T,$T>()", HashMap.class, String.class, String.class);
         typeSpecBuilder.addField(builder.build());
 
@@ -142,8 +147,9 @@ public class DatabaseCreater {
      * @return
      */
     private MethodSpec generateMethod_RoomInit() {
-        TypeName baseBuilderType = TypeName.get(RoomDatabase.Builder.class);
-        TypeName contextType = TypeName.get(Context.class);
+        ClassName baseBuilderType = ClassName.get("androidx.room",
+                "RoomDatabase", "Builder");
+        ClassName contextType = ClassName.get("android.content", "Context");
         String classNameClass = databaseBean.getClassName() + ".class";
         String roomPath = "androidx.room.Room";
         DatabaseHlp annotation = databaseBean.getClassElement().getAnnotation(DatabaseHlp.class);
@@ -156,7 +162,8 @@ public class DatabaseCreater {
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                 .returns(baseBuilderType)
                 .addParameter(contextType, "context")
-                .addStatement("return $L.databaseBuilder(context,$L,$S)", roomPath, classNameClass, dbName)
+                .addStatement("return $L.databaseBuilder(context,$L,$S)",
+                        roomPath, classNameClass, dbName)
                 .build();
         return methodSpec;
     }
@@ -188,20 +195,25 @@ public class DatabaseCreater {
         if (annotationSpec != null) {
             typeSpecBuilder.addAnnotation(generateAnSpec());
         }
-        typeSpecBuilder.superclass(RoomDatabase.class);
+        ClassName roomDatabaseType = ClassName.get("androidx.room", "RoomDatabase");
+
+        typeSpecBuilder.superclass(roomDatabaseType);
         //添加版本号属性
         if (version != 0) {
             typeSpecBuilder.addField(generateVersionFieldSpec());
         }
-        //添加迁移数据库属性
-        for (MigrateElementBean elementBean : databaseBean.getMigrateElementBeans()) {
-            typeSpecBuilder.addField(new MigrateCreater(elements, elementBean).fieldMigration());
-        }
-        //添加@DaoHlp属性
+
+        //添加@DaoHlp属性，也就是注入@dao 的属性
         if (databaseBean.getDaoHlpFieldElements().size() != 0) {
             generateDaoFileMap(typeSpecBuilder);
         }
+        //添加或RoomDatabase.Builder的静态方法方法
         typeSpecBuilder.addMethod(generateMethod_RoomInit());
+        //添加迁移数据库属性
+        for (MigrateElementBean elementBean : databaseBean.getMigrateElementBeans()) {
+            MigrateCreater migrateCreater = new MigrateCreater(elements, elementBean);
+            migrateCreater.fieldMigration(typeSpecBuilder);
+        }
         //添加dao接口的抽象方法
         for (Element dao : databaseBean.getDaoElements()) {
             typeSpecBuilder.addMethod(generateMethod_Dao(dao));

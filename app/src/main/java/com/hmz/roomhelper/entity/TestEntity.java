@@ -5,14 +5,26 @@ import androidx.room.PrimaryKey;
 
 import com.hmz.roomhelper_annotation.FieldHlp;
 
+import java.util.Date;
+
 @Entity(tableName = "tb_testEntity")
 public class TestEntity {
     @PrimaryKey(autoGenerate = true)
     private int testId;
-    @FieldHlp(startVersion = 2, endVersion = 3)
+    //    @FieldHlp(startVersion = 2, endVersion = 3)
     private String testName;
-    @FieldHlp(startVersion = 3, endVersion = 4)
+    @FieldHlp(startVersion = 1, endVersion = 2)
     private long creatTime;
+    @FieldHlp(startVersion = 2, endVersion = 3)
+    private boolean isOk;
+
+    @FieldHlp(startVersion = 3, endVersion = 4)
+    private String noewDate;
+    @FieldHlp(startVersion = 4, endVersion = 5)
+    private double price;
+    @FieldHlp(oldFieldName = "fff", oldStartVersion = 5, oldEndVersion = 6,
+            startVersion = 6, endVersion = 7)
+    private float ccc;
 
     public int getTestId() {
         return testId;
@@ -36,5 +48,37 @@ public class TestEntity {
 
     public void setCreatTime(long creatTime) {
         this.creatTime = creatTime;
+    }
+
+    public boolean isOk() {
+        return isOk;
+    }
+
+    public void setOk(boolean ok) {
+        isOk = ok;
+    }
+
+    public String getNoewDate() {
+        return noewDate;
+    }
+
+    public void setNoewDate(String noewDate) {
+        this.noewDate = noewDate;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public float getCcc() {
+        return ccc;
+    }
+
+    public void setCcc(float ccc) {
+        this.ccc = ccc;
     }
 }

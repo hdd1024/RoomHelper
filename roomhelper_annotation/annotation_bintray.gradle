@@ -1,9 +1,8 @@
-// 这里添加下面两行代码。
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
+group = group
 version = version
-
 if (project.hasProperty("android")) { // Android libraries
     task sourcesJar(type: Jar) {
         classifier = 'sources'
@@ -29,16 +28,16 @@ artifacts {
 //    archives javadocJar
     archives sourcesJar
 }
+
 Properties properties = new Properties()
 properties.load(project.rootProject.file('local.properties').newDataInputStream())
 bintray {
     user = properties.getProperty("bintray.user")
     key = properties.getProperty("bintray.apikey")
-
     configurations = ['archives']
     pkg {
         repo = repo  //Repository名字 需要自己在bintray网站上先添加
-        name = "roomhelper_compiler"// 发布到Bintray上的项目名字,你在bintray网站上新建的包名
+        name = "roomhelper_annotation"// 发布到Bintray上的项目名字,你在bintray网站上新建的包名
         websiteUrl = siteUrl
         vcsUrl = gitUrl
         licenses = ["Apache-2.0"]

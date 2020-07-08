@@ -31,6 +31,7 @@ public class MakeExecSQL {
     private final String AGU_ADD_COLUMN = "ADD COLUMN ";
     private final String AGU_PRIMARY_KEY = "PRIMARY KEY ";
     private final String AGU_AUTOINCREMENT = "AUTOINCREMENT ";
+    private final String AGU_DEFAULT = "DEFAULT ";
     private final String FT_NOT_NULL = "NOT NULL ";
     private final String FT_NUMERIC = "NUMERIC ";//
     private final String FT_INTEGER = "INTEGER ";//byte，short，int，long
@@ -125,6 +126,10 @@ public class MakeExecSQL {
         return strBuilder.toString();
     }
 
+    public String addColumn(String caller, VariableElement varElement) {
+        return addColumn(caller, varElement, null);
+    }
+
     /**
      * 添加单个字段
      *
@@ -133,7 +138,7 @@ public class MakeExecSQL {
      * @return 拼装完成的字符串如下字符串：
      * database..execSQL("ALTER TABLE table_name ADD COLUMN column_name TEXT");
      */
-    public String addColumn(String caller, VariableElement varElement) {
+    public String addColumn(String caller, VariableElement varElement, String columName) {
         // alter table table_name add column column_name text
         strBuilder.setLength(0);
         strBuilder.append(caller);
@@ -143,7 +148,11 @@ public class MakeExecSQL {
         strBuilder.append(getTableNameByField(varElement));
         strBuilder.append(" ");
         strBuilder.append(AGU_ADD_COLUMN);
-        strBuilder.append(varElement.getSimpleName());
+        if (columName == null) {
+            strBuilder.append(varElement.getSimpleName());
+        } else {
+            strBuilder.append(columName);
+        }
         strBuilder.append(" ");
         strBuilder.append(getFielType(varElement));
         strBuilder.append(_END);
@@ -330,16 +339,17 @@ public class MakeExecSQL {
         String fileTypeStr = element.asType().toString();
         if (Utils.strEuqals(fileTypeStr, "int", "Integer", "byte", "Byte",
                 "short", "Short", "long", "Long")) {
-            return FT_INTEGER;
+            //整型默认不等于0
+            return FT_INTEGER + FT_NOT_NULL + AGU_DEFAULT + "0 ";
         } else if (Utils.strEuqals(fileTypeStr, "double",
                 "Double", "float", "Float")) {
-            return FT_REAL;
+            return FT_REAL + FT_NOT_NULL + AGU_DEFAULT + "0.0 ";
         } else if (Utils.strEuqals(fileTypeStr, "boolean", "Boolean")) {
-            return FT_BLOB;
+            return FT_INTEGER + FT_NOT_NULL + AGU_DEFAULT + "0 ";
         } else if (fileTypeStr.contains("String")) {
             return FT_TEXT;
         } else if (fileTypeStr.contains("Date")) {
-            return FT_DATE;
+            return FT_TEXT + FT_NOT_NULL + AGU_DEFAULT + System.currentTimeMillis() + " ";
         } else if (Utils.strEuqals(fileTypeStr, "char")) {
             return FT_TEXT;
         } else if (Utils.strEuqals(fileTypeStr, "Character")) {

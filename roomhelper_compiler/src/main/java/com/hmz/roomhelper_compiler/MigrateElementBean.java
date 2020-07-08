@@ -52,6 +52,6 @@ public class MigrateElementBean implements Comparable<MigrateElementBean> {
      */
     @Override
     public int compareTo(@NotNull MigrateElementBean migrateElementBean) {
-        return migrateElementBean.endVersion;
+        return this.endVersion - migrateElementBean.endVersion;
     }
 }

@@ -3,19 +3,16 @@ package com.hmz.roomhelper.entity;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-import com.hmz.roomhelper_annotation.FieldHlp;
+import com.hmz.roomhelper_annotation.EntityHlp;
 
+@EntityHlp(addTable = true, startVersion = 7, endVersion = 8)
 @Entity(tableName = "tb_testEntity2")
 public class TestEntity2 {
     @PrimaryKey
     private int testId;
-    @FieldHlp(oldFieldName = "testName0", startVersion = 1, endVersion = 2)
     private String testName;
-    @FieldHlp(startVersion = 1, endVersion = 2)
     private double testD;
-    @FieldHlp(startVersion = 2, endVersion = 3)
     private float testC;
-    @FieldHlp(startVersion = 1, endVersion = 2)
     private String ttt;
 
 

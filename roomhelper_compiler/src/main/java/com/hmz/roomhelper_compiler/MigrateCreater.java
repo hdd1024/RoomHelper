@@ -1,16 +1,17 @@
 package com.hmz.roomhelper_compiler;
 
-import androidx.room.migration.Migration;
-
 import com.hmz.roomhelper_annotation.EntityHlp;
 import com.hmz.roomhelper_annotation.FieldHlp;
 import com.hmz.roomhelper_compiler.utils.Utils;
+import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.FieldSpec;
+import com.squareup.javapoet.TypeSpec;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.lang.model.element.Element;
+import javax.lang.model.element.Modifier;
 import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
@@ -22,11 +23,11 @@ import javax.lang.model.util.Elements;
  * describe: 用于处理数据库的增删改标签的功能
  * 备注信息: {}
  **********************************************************/
-// TODO: 2020-07-03 更好名称，将RoomHelper 改成RoomHelper，将Ex改为H等名称
 public class MigrateCreater {
     private MigrateElementBean migrateElementBean;
     private Elements elements;
     private MakeExecSQL makeExecSQL;
+    private TypeSpec.Builder typeSpecBuilder;
 
     public MigrateCreater(Elements elements, MigrateElementBean bean) {
         this.elements = elements;
@@ -35,15 +36,22 @@ public class MigrateCreater {
     }
 
 
-    public FieldSpec fieldMigration() {
+    public void fieldMigration(TypeSpec.Builder typeSpecBuilder) {
+        this.typeSpecBuilder = typeSpecBuilder;
         int startVersion = migrateElementBean.getStartVersion();
         int endVersion = migrateElementBean.getEndVersion();
         String database = "database";
-        String fieldName = "MIGRATION_" + startVersion + "_" + endVersion;
-        FieldSpec.Builder builder = FieldSpec.builder(Migration.class, fieldName);
+        generateMigration(getMigrationExexSql(database), startVersion, endVersion);
+    }
+
+    private void generateMigration(String execqsl, int start, int end) {
+        ClassName migration = ClassName.get("androidx.room.migration", "Migration");
+        String fieldName = "MIGRATION_" + start + "_" + end;
+        FieldSpec.Builder builder = FieldSpec.builder(migration, fieldName);
+        builder.addModifiers(Modifier.PUBLIC, Modifier.STATIC);
         builder.initializer("new $T($L,$L){ @Override\n  public void migrate(androidx.sqlite.db.SupportSQLiteDatabase database){$L}}",
-                Migration.class, startVersion, endVersion, getMigrationExexSql(database));
-        return builder.build();
+                migration, start, end, execqsl);
+        this.typeSpecBuilder.addField(builder.build());
     }
 
     //该变量用于储存修改了表字段名的class类的全路径名称
@@ -66,6 +74,14 @@ public class MigrateCreater {
                 migrateBuilder.append(addColumns);
 
             } else if (migrateType == 2) {//修改字段名
+                FieldHlp fieldHlp = element.getAnnotation(FieldHlp.class);
+                int oldStartVersion = fieldHlp.oldStartVersion();
+                int oldEndVersion = fieldHlp.oldEndVersion();
+                if (oldStartVersion != 0 && oldEndVersion != 0) {
+                    String oldFieldName = fieldHlp.oldFieldName();
+                    String addColumn = makeExecSQL.addColumn(database, (VariableElement) element, oldFieldName);
+                    generateMigration("\n" + addColumn + "\n", oldStartVersion, oldEndVersion);
+                }
                 TypeElement typeElement = (TypeElement) element.getEnclosingElement();
                 changeFieldNameclass = getFieldClassFullName(typeElement);
                 String provisionalName = typeElement.getSimpleName().toString() + "_pro";

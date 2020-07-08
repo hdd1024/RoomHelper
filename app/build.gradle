@@ -40,9 +40,12 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     compileOnly project(':roomhelper_annotation')
+//    implementation 'com.hmz:roomhelper_annotation:1.0.0'
     annotationProcessor project(':roomhelper_compiler')
     implementation project(":roomhelper_api")
     def room_version = "2.2.4"
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
+    implementation 'com.facebook.stetho:stetho:1.5.1'
+
 }
