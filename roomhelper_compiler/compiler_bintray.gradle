@@ -1,6 +1,6 @@
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
-
+group = _group
 version = _version
 
 if (project.hasProperty("android")) { // Android libraries

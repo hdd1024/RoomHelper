@@ -10,16 +10,16 @@ import com.hmz.roomhelper_api.RoomHelper;
 import com.hmz.roomhelper.controller.TestController;
 import com.hmz.roomhelper_annotation.DatabaseHlp;
 
-@DatabaseHlp(name = "test_roombase_db")
+@DatabaseHlp( version = 9,name = "test_roombase_db",exportSchema = false)
 public class TestJbRoomBase {
     private static final TestJbRoomBase INSTANCE = new TestJbRoomBase();
     //只要使用了RoomHelper的migrateConfig()方法，下面这个就会自动添加
-//    Migration MIGRATION_2_3 = new Migration(2, 3) {
-//        @Override
-//        public void migrate(androidx.sqlite.db.SupportSQLiteDatabase database) {
-//            database.execSQL("ALTER TABLE  tb_testEntity2 ADD COLUMN testD REAL ");
-//        }
-//    };
+    Migration MIGRATION_2_3 = new Migration(2, 3) {
+        @Override
+        public void migrate(androidx.sqlite.db.SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE  tb_testEntity2 ADD COLUMN testD REAL ");
+        }
+    };
 
     private TestJbRoomBase() {
     }

@@ -1,13 +1,8 @@
 package com.hmz.roomhelper_api;
 
 import android.content.Context;
-import android.util.Log;
-
 import androidx.room.RoomDatabase;
 import androidx.room.migration.Migration;
-
-import com.hmz.roomhelper_api.utils.Utils;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
@@ -36,7 +31,6 @@ public class AnalyzingMigrate {
         //获取xx.TestJbRoomBase_Hlp类
         Method roomInit = base_Hlp_Impl_Class.getMethod("roomInit", Context.class);
         builder = (RoomDatabase.Builder) roomInit.invoke(null, context);
-        Log.d("AnalyzingMigrate", "builder的值：" + builder);
         this.builder = builder;
         //解析TestJbRoomBase类中是否存在自定义的Migration变量
         Field[] declaredFields = base_Hlp_Impl_Class.getDeclaredFields();
@@ -47,8 +41,6 @@ public class AnalyzingMigrate {
                     declaredField.setAccessible(true);
                 }
                 Migration migration = (Migration) declaredField.get(databaseObj);
-                Log.d("AnalyzingMigrate", "------>migration的值：" + migration);
-
                 if (builder != null) {
                     builder.addMigrations(migration);
                 }
@@ -64,7 +56,6 @@ public class AnalyzingMigrate {
                     hlpField.setAccessible(true);
                 }
                 builder.addMigrations((Migration) hlpField.get(null));
-                Log.d(">>>>>>>>>>>aaaaaa>>>>>>", "nnnn<<<<" + hlpField.getName());
             }
         }
         return builder;

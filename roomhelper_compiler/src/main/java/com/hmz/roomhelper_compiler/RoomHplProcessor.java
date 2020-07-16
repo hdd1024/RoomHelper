@@ -37,7 +37,6 @@ import javax.tools.Diagnostic;
         Constant.DAO_HLP_PATH})
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
 public class RoomHplProcessor extends AbstractProcessor {
-    public final static String DatabaseHlpPath = DatabaseHlp.class.getName();
     private Messager mMessager;
     private Elements mElements;
     private Filer mFiler;

@@ -69,7 +69,11 @@ public class DatabaseCreater {
         //获取@RoomBase注解中的值
         Map<String, Object> annValues = Utils.getAnnotationValus(databaseBean.getClassElement());
         //获取数据库的版本号
-        version = databaseBean.getClassElement().getAnnotation(DatabaseHlp.class).version();
+        DatabaseHlp databaseHlp = databaseBean.getClassElement().getAnnotation(DatabaseHlp.class);
+        version = databaseHlp.version();
+//        boolean schema = databaseHlp.exportSchema();
+//        mMessager.printMessage(Diagnostic.Kind.NOTE,">>>>>>>schema>>>>>>>>"+schema);
+
         if (version == 0) {
             StringBuilder builder = new StringBuilder();
             builder.append(databaseBean.getClassFullName());
@@ -97,7 +101,8 @@ public class DatabaseCreater {
             annotationSpecBuilder.addMember("views", "$L", viewsValus);
         }
         //添加是否到处json
-        boolean exportSchema = annValues.containsKey("exportSchema");
+        boolean exportSchema = (boolean) annValues.get("exportSchema");
+        mMessager.printMessage(Diagnostic.Kind.NOTE,">>>>>>>exportSchema>>>>>>>>"+exportSchema);
         annotationSpecBuilder.addMember("exportSchema", "$L", exportSchema);
         return annotationSpecBuilder.build();
     }

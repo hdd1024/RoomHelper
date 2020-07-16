@@ -15,7 +15,7 @@ import java.lang.annotation.Target;
  **********************************************************/
 @Target({ElementType.FIELD,
         ElementType.TYPE})
-@Retention(RetentionPolicy.CLASS)
+@Retention(RetentionPolicy.RUNTIME)
 public @interface FieldHlp {
 
     /**
