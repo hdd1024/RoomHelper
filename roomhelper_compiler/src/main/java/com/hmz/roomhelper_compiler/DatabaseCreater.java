@@ -102,7 +102,7 @@ public class DatabaseCreater {
         }
         //添加是否到处json
         boolean exportSchema = (boolean) annValues.get("exportSchema");
-        mMessager.printMessage(Diagnostic.Kind.NOTE,">>>>>>>exportSchema>>>>>>>>"+exportSchema);
+        mMessager.printMessage(Diagnostic.Kind.NOTE, ">>>>>>>exportSchema>>>>>>>>" + exportSchema);
         annotationSpecBuilder.addMember("exportSchema", "$L", exportSchema);
         return annotationSpecBuilder.build();
     }
@@ -146,8 +146,34 @@ public class DatabaseCreater {
         typeSpecBuilder.addMethod(methodBuilder.build());
     }
 
+//    /**
+//     * 生成RoomDatabase.Builder的静态方法
+//     *
+//     * @return
+//     */
+//    private MethodSpec generateMethod_RoomInit() {
+//        ClassName baseBuilderType = ClassName.get("androidx.room",
+//                "RoomDatabase", "Builder");
+//        ClassName contextType = ClassName.get("android.content", "Context");
+//        String classNameClass = databaseBean.getClassName() + ".class";
+//        String roomPath = "androidx.room.Room";
+//        DatabaseHlp annotation = databaseBean.getClassElement().getAnnotation(DatabaseHlp.class);
+//        String dbName = annotation.name();
+//        if (dbName.equals("")) {
+//            dbName = databaseBean.getClassElement().getSimpleName().toString();
+//        }
+//        MethodSpec methodSpec = MethodSpec.methodBuilder("roomInit")
+//                .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+//                .returns(baseBuilderType)
+//                .addParameter(contextType, "context")
+//                .addStatement("return $L.databaseBuilder(context,$L,$S)",
+//                        roomPath, classNameClass, dbName)
+//                .build();
+//        return methodSpec;
+//    }
+
     /**
-     * 生成RoomDatabase.Builder的静态方法
+     * 生成RoomDatabase.Builder的静态方法,带数据库路径
      *
      * @return
      */
@@ -157,21 +183,22 @@ public class DatabaseCreater {
         ClassName contextType = ClassName.get("android.content", "Context");
         String classNameClass = databaseBean.getClassName() + ".class";
         String roomPath = "androidx.room.Room";
+
+        MethodSpec.Builder methodSpecBuiler = MethodSpec.methodBuilder("roomInit");
+        methodSpecBuiler.addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                .returns(baseBuilderType)
+                .addParameter(contextType, "context");
         DatabaseHlp annotation = databaseBean.getClassElement().getAnnotation(DatabaseHlp.class);
         String dbName = annotation.name();
         if (dbName.equals("")) {
-            dbName = databaseBean.getClassElement().getSimpleName().toString();
+            methodSpecBuiler.addParameter(String.class, "dbName");
+            methodSpecBuiler.addStatement("return $L.databaseBuilder(context,$L,$L)", roomPath, classNameClass, "dbName");
+        } else {
+            methodSpecBuiler.addStatement("return $L.databaseBuilder(context,$L,$S)", roomPath, classNameClass, dbName);
         }
-
-        MethodSpec methodSpec = MethodSpec.methodBuilder("roomInit")
-                .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
-                .returns(baseBuilderType)
-                .addParameter(contextType, "context")
-                .addStatement("return $L.databaseBuilder(context,$L,$S)",
-                        roomPath, classNameClass, dbName)
-                .build();
-        return methodSpec;
+        return methodSpecBuiler.build();
     }
+
 
     /**
      * 生产dao接口的抽象方法
@@ -213,7 +240,9 @@ public class DatabaseCreater {
             generateDaoFileMap(typeSpecBuilder);
         }
         //添加或RoomDatabase.Builder的静态方法方法
+
         typeSpecBuilder.addMethod(generateMethod_RoomInit());
+//        typeSpecBuilder.addMethod(generateMethod_RoomInit_dbPaht());
         //添加迁移数据库属性
         for (MigrateElementBean elementBean : databaseBean.getMigrateElementBeans()) {
             MigrateCreater migrateCreater = new MigrateCreater(elements, elementBean);

@@ -10,7 +10,8 @@ import com.hmz.roomhelper_api.RoomHelper;
 import com.hmz.roomhelper.controller.TestController;
 import com.hmz.roomhelper_annotation.DatabaseHlp;
 
-@DatabaseHlp( version = 9,name = "test_roombase_db",exportSchema = false)
+
+@DatabaseHlp(version = 9,  exportSchema = false)
 public class TestJbRoomBase {
     private static final TestJbRoomBase INSTANCE = new TestJbRoomBase();
     //只要使用了RoomHelper的migrateConfig()方法，下面这个就会自动添加
@@ -30,7 +31,7 @@ public class TestJbRoomBase {
 
     public void init(Context context) {
         RoomHelper.getIntanse().initHelper(this)
-                .migrateConfig(context)
+                .migrateConfig(context,"test_roombase_db")
                 .fallbackToDestructiveMigration()
                 .allowMainThreadQueries() //可以在主线程操作
                 .build();

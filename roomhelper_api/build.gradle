@@ -28,7 +28,7 @@ dependencies {
     annotationProcessor "androidx.room:room-compiler:$room_version"
     // For Kotlin use kapt instead of annotationProcessor
     compileOnly "androidx.room:room-runtime:$room_version"
-    compileOnly project(":roomhelper_annotation")
+    compileOnly  'com.hmz:roomhelper_annotation:1.0.3'
 
 }
 

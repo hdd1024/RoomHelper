@@ -3,6 +3,7 @@ package com.hmz.roomhelper;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -16,7 +17,7 @@ import java.util.List;
 
 
 public class Main2Activity extends AppCompatActivity {
-
+    private String TAG = Main2Activity.class.getSimpleName();
     Button btn_db_query;
     TextView tv_db_data, tv_db_data2;
     private TestController testController;
@@ -31,6 +32,7 @@ public class Main2Activity extends AppCompatActivity {
         TestJbRoomBase.getInstance().init(getBaseContext());
         testController = TestJbRoomBase.getInstance().getTestController();
         testController.intsert("韩明泽", 12345);
+        Log.d(TAG,"-------------------------->TestJbRoomBase");
 
         testController.intsertDao2();
 
@@ -43,8 +45,6 @@ public class Main2Activity extends AppCompatActivity {
         });
 //        TestJbRoomBase.getInstance().getTestController2()
 //                .insert();
-
-
     }
 
     public void dao2QueryAll(View view) {

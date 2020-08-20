@@ -34,10 +34,10 @@ public @interface DatabaseHlp {
     /**
      * 数据库的名称
      * 如果不传默认将会以使用该注解类的类名作为数据库的名称
+     *
      * @return 默认""
      */
     String name() default "";
-
     /**
      * 数据库版本号
      *
@@ -49,6 +49,7 @@ public @interface DatabaseHlp {
     /**
      * 配置的值会设置在Room的<code>@Database</code>的
      * <code>views</code>中。
+     *
      * @return 默认{}
      */
     Class<?>[] views() default {};
@@ -56,6 +57,7 @@ public @interface DatabaseHlp {
     /**
      * 配置的值会设置在Room的<code>@Database</code>的
      * <code>exportSchema</code>中
+     *
      * @return 默认true
      */
     boolean exportSchema() default true;

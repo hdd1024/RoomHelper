@@ -60,7 +60,26 @@ public class RoomHelper {
     public <T extends RoomDatabase> HelperBuilder<T> migrateConfig(Context context) {
         AnalyzingMigrate migrate = new AnalyzingMigrate(databaseObj, base_Hlp_Class);
         try {
-            helperBuilder = new HelperBuilder(migrate.getBuilder(context));
+            helperBuilder = new HelperBuilder(migrate.getBuilder(context, null));
+            return helperBuilder;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 该方用于配置数据库迁移，会自动将xxx.TestJbRoomBase_Hlp类中生成
+     * MIGRATION_1_2 添加到builder.addMigrations()方法中
+     *
+     * @param context 上下文
+     * @param dbName  数据库名称
+     * @return 添加完毕后返回条件好的Builder
+     */
+    public <T extends RoomDatabase> HelperBuilder<T> migrateConfig(Context context, String dbName) {
+        AnalyzingMigrate migrate = new AnalyzingMigrate(databaseObj, base_Hlp_Class);
+        try {
+            helperBuilder = new HelperBuilder(migrate.getBuilder(context, dbName));
             return helperBuilder;
         } catch (Exception e) {
             e.printStackTrace();
@@ -97,6 +116,7 @@ public class RoomHelper {
     public void clearControllerMap() {
         controllerMap.clear();
     }
+
     public <T> T removeController(Class<T> controller) {
         Object remove = controllerMap.remove(controller.getName());
         return controller.cast(remove);

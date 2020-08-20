@@ -3,6 +3,7 @@ package com.hmz.roomhelper_api;
 import android.content.Context;
 import androidx.room.RoomDatabase;
 import androidx.room.migration.Migration;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
@@ -25,12 +26,18 @@ public class AnalyzingMigrate {
         this.base_Hlp_Impl_Class = base_Hlp_Impl_Class;
     }
 
-    public RoomDatabase.Builder getBuilder(Context context)
+    public RoomDatabase.Builder getBuilder(Context context, String dbName)
             throws Exception {
         RoomDatabase.Builder builder = null;
         //获取xx.TestJbRoomBase_Hlp类
-        Method roomInit = base_Hlp_Impl_Class.getMethod("roomInit", Context.class);
-        builder = (RoomDatabase.Builder) roomInit.invoke(null, context);
+        if (null == dbName) {
+            Method roomInit = base_Hlp_Impl_Class.getMethod("roomInit", Context.class);
+            builder = (RoomDatabase.Builder) roomInit.invoke(null, context);
+
+        } else {
+            Method roomInit = base_Hlp_Impl_Class.getMethod("roomInit", Context.class, String.class);
+            builder = (RoomDatabase.Builder) roomInit.invoke(null, context, dbName);
+        }
         this.builder = builder;
         //解析TestJbRoomBase类中是否存在自定义的Migration变量
         Field[] declaredFields = base_Hlp_Impl_Class.getDeclaredFields();
@@ -51,7 +58,7 @@ public class AnalyzingMigrate {
         Field[] hlpFields = base_Hlp_Impl_Class.getDeclaredFields();
         for (Field hlpField : hlpFields) {
             Type fieldType = hlpField.getGenericType();
-            if (fieldType==Migration.class) {
+            if (fieldType == Migration.class) {
                 if (!hlpField.isAccessible()) {
                     hlpField.setAccessible(true);
                 }
